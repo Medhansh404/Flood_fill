@@ -1,0 +1,2 @@
+This file tries to explain the working of the functions used in the project
+1). numpy.unique
