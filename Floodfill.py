@@ -19,6 +19,7 @@ cv2.destroyWindow('image')
 # Way 2
 filename = "stock_img.jpeg"
 with Image.open(filename) as img:
+    height, width = img.shape
 
 
 # 1). Task done img imported and converted to workable format
@@ -43,11 +44,12 @@ print(a, b)
 
 def color_dump(image, min_color, max_color) -> List[List[int]]:
     # Trying bfs
-    req_pixels = image[(image[:, :, 0] == max_color[0]) & (image[:, :, 1] == max_color[1]) & (image[:, :, 2] == max_color[2])]
+    req_pixels = image[
+        (image[:, :, 0] == max_color[0]) & (image[:, :, 1] == max_color[1]) & (image[:, :, 2] == max_color[2])]
     print(req_pixels[0:6])
-    #for i in req_pixels:
+    # for i in req_pixels:
 
-    return[]
+    return []
 
 
 test = color_dump(img, b, a)
