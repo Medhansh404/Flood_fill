@@ -42,15 +42,46 @@ def most_frequent_color(image) -> tuple[Any, Any]:
 _, a, b = most_frequent_color(img)
 print(a, b)
 
+import numpy as np
+from collections import deque
+
 
 def color_dump(image, min_color, max_color):
-    # Trying bfs
-    req_pixels = image[
-        (image[:, :, 0] == max_color[0]) & (image[:, :, 1] == max_color[1]) & (image[:, :, 2] == max_color[2])]
+    # Convert the colors to arrays for easy comparison
+    min_color = np.array(min_color)
+    max_color = np.array(max_color)
 
-    # for i in req_pixels:
+    # Store coordinates of pixels within the color range
+    matching_pixels = []
 
-    return []
+    # Initialize BFS
+    visited = np.zeros((image.shape[0], image.shape[1]), dtype=bool)
+
+    for x in range(image.shape[0]):
+        for y in range(image.shape[1]):
+            if not visited[x, y] and np.all(min_color <= image[x, y]) and np.all(image[x, y] <= max_color):
+                # Start BFS from this pixel
+                queue = deque([(x, y)])
+                visited[x, y] = True
+                component = []
+
+                while queue:
+                    cx, cy = queue.popleft()
+                    component.append((cx, cy))
+
+                    # Explore neighbors
+                    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                        nx, ny = cx + dx, cy + dy
+                        if 0 <= nx < image.shape[0] and 0 <= ny < image.shape[1]:
+                            if not visited[nx, ny] and np.all(min_color <= image[nx, ny]) and np.all(
+                                    image[nx, ny] <= max_color):
+                                visited[nx, ny] = True
+                                queue.append((nx, ny))
+
+                # Add the found component to matching pixels
+                matching_pixels.append(component)
+
+    return matching_pixels
 
 
 # Replace most used color with a new color
